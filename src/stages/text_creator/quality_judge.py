@@ -74,6 +74,7 @@ async def judge_content_quality(
         prompt=prompt,
         system="你是一位严格的内容质量评审员。输出纯JSON。",
         temperature=0.2,
+        max_tokens=1024,
     )
 
     raw = raw.strip()

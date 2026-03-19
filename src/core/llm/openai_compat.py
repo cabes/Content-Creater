@@ -38,7 +38,7 @@ class OpenAICompatLLM(BaseLLM):
             "Content-Type": "application/json",
         }
 
-        async with httpx.AsyncClient(timeout=120) as client:
+        async with httpx.AsyncClient(timeout=300) as client:
             resp = await client.post(self._base_url, json=payload, headers=headers)
             resp.raise_for_status()
             data = resp.json()

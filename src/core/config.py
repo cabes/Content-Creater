@@ -106,8 +106,37 @@ def load_yaml_config(path: Path | None = None) -> dict[str, Any]:
 
 @lru_cache
 def get_settings() -> Settings:
-    """Get cached application settings, merging YAML + env vars."""
+    """Get cached application settings. Env vars override YAML values.
+
+    Priority (high → low): env vars > YAML > code defaults.
+    For nested configs (llm, tts, etc.), env vars with the right prefix
+    (LLM_, TTS_, etc.) always win over YAML.
+    """
+    import os
     yaml_data = load_yaml_config()
+
+    # For each nested config, let env vars override YAML values
+    nested_env_prefixes = {
+        "llm": "LLM_",
+        "tts": "TTS_",
+        "redis": "REDIS_",
+        "database": "DATABASE_",
+        "minio": "MINIO_",
+        "topic_engine": "TOPIC_",
+        "compliance": "COMPLIANCE_",
+    }
+    for section, prefix in nested_env_prefixes.items():
+        if section not in yaml_data:
+            continue
+        section_data = yaml_data[section]
+        if not isinstance(section_data, dict):
+            continue
+        for key in list(section_data.keys()):
+            env_key = f"{prefix}{key.upper()}"
+            if env_key in os.environ:
+                # Env var exists — remove from YAML so Pydantic reads from env
+                del section_data[key]
+
     return Settings(**yaml_data)
 
 
