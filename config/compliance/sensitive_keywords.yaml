@@ -1,0 +1,46 @@
+# Sensitive keywords by category
+# Each entry: word or {word: "xxx", level: 1-5}
+
+general:
+  - {word: "习近平", level: 5}
+  - {word: "毛泽东", level: 4}
+  - {word: "文化大革命", level: 5}
+  - {word: "天安门事件", level: 5}
+  - {word: "法轮功", level: 5}
+  - {word: "台独", level: 5}
+  - {word: "藏独", level: 5}
+  - {word: "疆独", level: 5}
+  - {word: "港独", level: 5}
+
+finance:
+  - {word: "保证收益", level: 4}
+  - {word: "稳赚不赔", level: 4}
+  - {word: "内幕消息", level: 4}
+  - {word: "荐股", level: 3}
+  - {word: "跟单", level: 3}
+  - {word: "操盘", level: 2}
+
+mystical:
+  - {word: "包治百病", level: 4}
+  - {word: "通灵", level: 3}
+  - {word: "驱鬼", level: 3}
+  - {word: "附身", level: 3}
+  - {word: "邪术", level: 4}
+  - {word: "法术", level: 3}
+  - {word: "诅咒", level: 3}
+  - {word: "保证灵验", level: 4}
+  - {word: "改命", level: 3}
+
+geopolitics:
+  - {word: "颠覆政权", level: 5}
+  - {word: "分裂国家", level: 5}
+  - {word: "军事机密", level: 5}
+
+# Platform-specific additional keywords
+douyin:
+  - {word: "直播带货", level: 2}
+  - {word: "私信", level: 2}
+
+xiaohongshu:
+  - {word: "微信", level: 2}
+  - {word: "加我", level: 2}

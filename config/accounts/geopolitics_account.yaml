@@ -1,0 +1,50 @@
+# Geopolitics account configuration
+account_id: geopolitics_account
+brand_name: "观局者"
+domain: geopolitics
+
+persona:
+  name: "陈观"
+  role: "国际观察员"
+  description: "国际关系学者，多视角分析，客观冷静，专注大国博弈"
+  system_prompt: |
+    你是一位资深国际关系学者，专注大国博弈研究20年。
+    你的分析风格：多方视角呈现、结构性分析、引用智库报告和政策文件。
+    你至少从2-3方立场分析问题，避免单边倾向。
+    你善于用博弈论和地缘政治理论框架解释国际事件。
+    你从不做情绪化判断，保持学者的克制和客观。
+
+voice:
+  gender: male
+  pitch: medium
+  style: documentary
+  voice_id: ""
+
+visual:
+  primary_color: "#2d3436"
+  secondary_color: "#d63031"
+  accent_color: "#fdcb6e"
+  style: "news_documentary"
+  font: "思源宋体"
+
+platforms:
+  bilibili:
+    account_name: "观局者"
+    enabled: true
+  wechat:
+    account_name: "观局者"
+    enabled: true
+  youtube:
+    account_name: "GuanJu Observer"
+    enabled: true
+
+schedule:
+  hook:
+    frequency: "1-2/day"
+    times: ["12:00", "19:00"]
+    platforms: [bilibili, weibo]
+  value:
+    frequency: "1/week"
+    days: [saturday]
+    times: ["20:00"]
+    platforms: [bilibili, wechat, youtube]

@@ -1,0 +1,32 @@
+# Disclaimer templates by domain and format type
+
+finance:
+  video_end: "本内容仅供学习交流，不构成任何投资建议。投资有风险，入市需谨慎。"
+  article_footer: |
+    **免责声明**：本文内容仅代表个人观点，不构成投资建议。
+    任何投资决策请基于您自身的独立判断。过往业绩不代表未来表现。
+  short_disclaimer: "仅供学习，非投资建议"
+  comment_pin: "⚠️ 本视频不构成投资建议，请理性决策"
+
+geopolitics:
+  video_end: "本内容基于公开信息分析，仅供参考，不代表任何政治立场。"
+  article_footer: |
+    **声明**：本文分析基于公开信息来源，旨在提供多元视角，
+    不代表任何政治立场或倾向。
+  short_disclaimer: "基于公开信息，仅供参考"
+  comment_pin: "ℹ️ 本内容基于公开信息，多元视角分析"
+
+mystical:
+  video_end: "本内容基于古典占星学/传统文化的学术探讨，仅供文化研究和个人反思参考。"
+  article_footer: |
+    **学术声明**：本文内容基于占星学、心理学和传统文化的跨学科研究视角，
+    旨在探讨人类认知和文化传统。所有解读仅供个人反思和学术讨论，
+    不构成任何形式的预测或建议。
+  short_disclaimer: "文化研究视角，仅供参考"
+  comment_pin: "📚 本内容为文化研究视角的学术探讨"
+
+knowledge:
+  video_end: "本内容仅代表个人见解，欢迎批评指正。"
+  article_footer: |
+    **声明**：本文观点仅代表作者个人见解，欢迎讨论和批评指正。
+  short_disclaimer: "个人见解，欢迎讨论"

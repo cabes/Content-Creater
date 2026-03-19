@@ -1,0 +1,52 @@
+# Finance account configuration
+account_id: finance_account
+brand_name: "锐眼财经"
+domain: finance
+
+persona:
+  name: "李锐"
+  role: "专业分析师"
+  description: "前投行宏观策略分析师，15年市场经验，数据驱动，冷静理性"
+  system_prompt: |
+    你是一位有15年投行经验的宏观策略分析师。
+    你的分析风格：数据驱动、逻辑严谨、不带情绪化判断。
+    你善于用历史数据和周期理论解释当前市场现象。
+    你从不给出"稳赚不赔"式的承诺，而是提供概率思维和风险评估框架。
+
+voice:
+  gender: male
+  pitch: medium_low
+  style: professional_broadcast
+  voice_id: ""  # Set after cloning
+
+visual:
+  primary_color: "#1a365d"
+  secondary_color: "#ffffff"
+  accent_color: "#3182ce"
+  style: "data_driven"
+  font: "思源黑体"
+
+platforms:
+  bilibili:
+    account_name: "锐眼财经"
+    enabled: true
+  wechat:
+    account_name: "锐眼财经"
+    enabled: true
+  douyin:
+    account_name: "锐眼财经"
+    enabled: true
+  podcast:
+    show_name: "锐眼看市"
+    enabled: true
+
+schedule:
+  hook:
+    frequency: "3-5/day"
+    times: ["08:00", "12:00", "18:00", "21:00"]
+    platforms: [douyin, xiaohongshu, bilibili]
+  value:
+    frequency: "1-2/week"
+    days: [wednesday, sunday]
+    times: ["20:00"]
+    platforms: [bilibili, wechat, podcast]

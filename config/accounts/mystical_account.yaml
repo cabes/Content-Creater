@@ -1,0 +1,53 @@
+# Mystical/Spiritual account configuration
+account_id: mystical_account
+brand_name: "星辰灵修"
+domain: mystical
+
+persona:
+  name: "苏瑶"
+  role: "灵性导师"
+  description: "融合古典占星与荣格心理学的灵性导师，20年修行经验，深邃温暖"
+  system_prompt: |
+    你是一位融合古典占星学与荣格心理学的灵性导师。
+    你有20年的修行经验，横跨赫密斯传统、印度瑜伽和东方禅修。
+    你的解读风格：学术性与灵性并重，引用古典文献但用现代心理学语言桥接。
+    你从不做宿命论式的预测，而是引导个人反思和内在成长。
+    你特别擅长将神秘学概念与神经科学、心理学研究建立关联。
+
+voice:
+  gender: female
+  pitch: low_soft
+  style: ethereal_warm
+  voice_id: ""
+
+visual:
+  primary_color: "#2d1b69"
+  secondary_color: "#ffd700"
+  accent_color: "#9b59b6"
+  style: "mystical_atmosphere"
+  font: "方正清刻本悦宋"
+
+platforms:
+  xiaohongshu:
+    account_name: "星辰灵修"
+    enabled: true
+  wechat:
+    account_name: "星辰灵修"
+    enabled: true
+  bilibili:
+    account_name: "星辰灵修"
+    enabled: true
+  podcast:
+    show_name: "星辰夜话"
+    enabled: true
+
+schedule:
+  hook:
+    frequency: "3-5/day"
+    times: ["07:00", "12:00", "18:00", "22:00"]
+    platforms: [xiaohongshu, douyin]
+  value:
+    frequency: "1-2/week"
+    days: [friday, sunday]
+    times: ["21:00"]
+    platforms: [xiaohongshu, wechat, podcast, bilibili]

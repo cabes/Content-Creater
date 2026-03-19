@@ -1,0 +1,39 @@
+# Content Creater - Global Configuration
+app_name: "Content Creater"
+debug: true
+
+llm:
+  provider: "claude"
+  model: "claude-sonnet-4-20250514"
+  # api_key set via LLM_API_KEY env var
+  max_tokens: 4096
+  temperature: 0.7
+
+redis:
+  url: "redis://redis:6379/0"
+
+database:
+  url: "postgresql+asyncpg://content:content@postgres:5432/content_db"
+
+minio:
+  endpoint: "minio:9000"
+  access_key: "minioadmin"
+  secret_key: "minioadmin"
+  bucket: "content-media"
+  secure: false
+
+tts:
+  provider: "minimax"
+  # api_key set via TTS_API_KEY env var
+  default_voice_id: ""
+
+topic_engine:
+  scan_interval_hours: 2
+  min_emotion_intensity: 7.0
+  max_hook_topics_per_scan: 5
+  dailyhot_url: "https://dailyhot.hkg1.zeabur.app"
+
+compliance:
+  enabled: true
+  auto_fix: true
+  max_risk_level: 3

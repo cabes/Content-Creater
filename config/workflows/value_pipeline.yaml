@@ -1,0 +1,37 @@
+# Value Pipeline - 认知价值层 (低频精品)
+workflow:
+  name: value_pipeline
+  description: "知识建筑师模式：深度选题 → 体系化写作 → 质量评审"
+  schedule: "weekly"
+  trigger_on: hook_traffic_threshold
+
+  stages:
+    - topic_engine:
+        mode: knowledge_architect
+        source: [hook_feedback, knowledge_graph, manual]
+        max_topics: 3
+
+    - text_creator:
+        layer: value
+        min_length: 3000
+        framework: true
+        monetization_anchor: true
+        quality_check: true
+        min_quality_score: 7.0
+
+    # Phase 2+: TTS
+    # - tts_engine:
+    #     speed: moderate
+    #     style: authoritative
+
+    # Phase 3+: Video
+    # - video_maker:
+    #     max_duration: 900
+    #     engines: [remotion, manim, mystical]
+
+    # Phase 5+: Article + Publishing
+    # - article_formatter:
+    #     parallel_with: [video_maker]
+    # - publisher:
+    #     platforms: [bilibili, wechat, podcast]
+    #     link_to_hooks: true

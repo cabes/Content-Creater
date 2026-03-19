@@ -1,0 +1,21 @@
+# Finance pronunciation dictionary
+# Format: term<TAB>pronunciation_hint
+FOMC	F O M C
+QE	Q E 量化宽松
+CPI	C P I 消费者物价指数
+PPI	P P I 生产者物价指数
+GDP	G D P
+PMI	P M I 采购经理人指数
+LPR	L P R 贷款市场报价利率
+IPO	I P O 首次公开募股
+ETF	E T F
+MSCI	M S C I 明晟指数
+A股	A 股
+H股	H 股
+P/E	市盈率
+ROE	R O E 净资产收益率
+basis point	基点
+Fed	美联储
+PBOC	中国人民银行
+ECB	欧洲央行
+BOJ	日本央行
