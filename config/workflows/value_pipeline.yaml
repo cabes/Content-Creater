@@ -1,7 +1,8 @@
 # Value Pipeline - 认知价值层 (低频精品)
+# Full pipeline: 深度选题 → 体系化写作 → 合规 → TTS → 视频 → 文章 → 发布
 workflow:
   name: value_pipeline
-  description: "知识建筑师模式：深度选题 → 体系化写作 → 质量评审"
+  description: "知识建筑师模式：全链路精品"
   schedule: "weekly"
   trigger_on: hook_traffic_threshold
 
@@ -19,19 +20,22 @@ workflow:
         quality_check: true
         min_quality_score: 7.0
 
-    # Phase 2+: TTS
-    # - tts_engine:
-    #     speed: moderate
-    #     style: authoritative
+    - compliance:
+        enabled: true
+        auto_fix: true
+        max_risk_level: 3
 
-    # Phase 3+: Video
-    # - video_maker:
-    #     max_duration: 900
-    #     engines: [remotion, manim, mystical]
+    - tts_engine:
+        speed: moderate
+        style: authoritative
 
-    # Phase 5+: Article + Publishing
-    # - article_formatter:
-    #     parallel_with: [video_maker]
-    # - publisher:
-    #     platforms: [bilibili, wechat, podcast]
-    #     link_to_hooks: true
+    - video_maker:
+        max_duration: 900
+        engines: [remotion, manim, mystical]
+        max_scenes: 20
+
+    - article_formatter: {}
+
+    - publisher:
+        platforms: [bilibili, wechat, podcast]
+        cta_inject: true

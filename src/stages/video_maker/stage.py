@@ -77,7 +77,7 @@ class VideoMakerStage(Stage):
             if isinstance(engine_names, str):
                 engine_names = [engine_names]
             engine_name = engine_names[0]  # Use first available
-            engine = get_video_engine(engine_name, output_dir=video_dir)
+            engine = get_video_engine(engine_name, output_dir=video_dir, domain=content.domain.value)
 
             # 4. Render
             audio_path = Path(audio.file_path) if audio else None

@@ -35,9 +35,8 @@ async def main() -> None:
     args = parser.parse_args()
 
     from src.core.config import CONFIG_DIR
-    from src.core.pipeline import Pipeline, PipelineContext, load_workflow
-    from src.stages.topic_engine.stage import TopicEngineStage
-    from src.stages.text_creator.stage import TextCreatorStage
+    from src.core.pipeline import PipelineContext, load_workflow
+    from src.core.pipeline_builder import build_pipeline
 
     workflow_file = f"{args.workflow}_pipeline.yaml"
     workflow_config = load_workflow(CONFIG_DIR / "workflows" / workflow_file)
@@ -48,10 +47,7 @@ async def main() -> None:
             stage_def["topic_engine"]["domain"] = args.domain
 
     context = PipelineContext(workflow_config=workflow_config)
-
-    pipeline = Pipeline(name=f"{args.workflow}_pipeline")
-    pipeline.add_stage(TopicEngineStage())
-    pipeline.add_stage(TextCreatorStage())
+    pipeline = build_pipeline(workflow_config)
 
     print(f"Running {args.workflow} pipeline for domain: {args.domain}")
     print("=" * 60)
@@ -78,6 +74,10 @@ async def main() -> None:
             print(f"\nCTA Hooks:")
             for cta in run.content.cta_hooks:
                 print(f"  - {cta}")
+        if run.content.compliance_notes:
+            print(f"\nCompliance: {run.content.compliance_notes}")
+        if run.content.disclaimers:
+            print(f"Disclaimers: {len(run.content.disclaimers)} added")
 
         if args.output:
             output_data = run.content.model_dump(mode="json")

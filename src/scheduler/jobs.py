@@ -22,26 +22,20 @@ def run_async(coro: Any) -> Any:
         return asyncio.run(coro)
 
 
-async def _run_hook_pipeline(domain: str = "finance") -> dict[str, Any]:
-    """Run the hook content pipeline for a domain."""
+async def _run_pipeline(workflow_name: str, domain: str) -> dict[str, Any]:
+    """Run a named pipeline for a domain."""
     from src.core.config import CONFIG_DIR
-    from src.core.pipeline import Pipeline, PipelineContext, load_workflow
-    from src.stages.topic_engine.stage import TopicEngineStage
-    from src.stages.text_creator.stage import TextCreatorStage
+    from src.core.pipeline import PipelineContext, load_workflow
+    from src.core.pipeline_builder import build_pipeline
 
-    workflow_config = load_workflow(CONFIG_DIR / "workflows" / "hook_pipeline.yaml")
+    workflow_config = load_workflow(CONFIG_DIR / "workflows" / f"{workflow_name}.yaml")
 
-    # Inject domain
     for stage_def in workflow_config.get("stages", []):
         if isinstance(stage_def, dict) and "topic_engine" in stage_def:
             stage_def["topic_engine"]["domain"] = domain
 
     context = PipelineContext(workflow_config=workflow_config)
-
-    pipeline = Pipeline(name="hook_pipeline")
-    pipeline.add_stage(TopicEngineStage())
-    pipeline.add_stage(TextCreatorStage())
-
+    pipeline = build_pipeline(workflow_config)
     run = await pipeline.run(context)
 
     return {
@@ -49,34 +43,14 @@ async def _run_hook_pipeline(domain: str = "finance") -> dict[str, Any]:
         "status": run.status.value,
         "content_title": run.content.title if run.content else None,
     }
+
+
+async def _run_hook_pipeline(domain: str = "finance") -> dict[str, Any]:
+    return await _run_pipeline("hook_pipeline", domain)
 
 
 async def _run_value_pipeline(domain: str = "finance") -> dict[str, Any]:
-    """Run the value content pipeline for a domain."""
-    from src.core.config import CONFIG_DIR
-    from src.core.pipeline import Pipeline, PipelineContext, load_workflow
-    from src.stages.topic_engine.stage import TopicEngineStage
-    from src.stages.text_creator.stage import TextCreatorStage
-
-    workflow_config = load_workflow(CONFIG_DIR / "workflows" / "value_pipeline.yaml")
-
-    for stage_def in workflow_config.get("stages", []):
-        if isinstance(stage_def, dict) and "topic_engine" in stage_def:
-            stage_def["topic_engine"]["domain"] = domain
-
-    context = PipelineContext(workflow_config=workflow_config)
-
-    pipeline = Pipeline(name="value_pipeline")
-    pipeline.add_stage(TopicEngineStage())
-    pipeline.add_stage(TextCreatorStage())
-
-    run = await pipeline.run(context)
-
-    return {
-        "run_id": str(run.id),
-        "status": run.status.value,
-        "content_title": run.content.title if run.content else None,
-    }
+    return await _run_pipeline("value_pipeline", domain)
 
 
 # ── Celery task wrappers (imported when Celery is available) ──

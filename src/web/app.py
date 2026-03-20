@@ -57,10 +57,9 @@ async def get_config() -> dict[str, Any]:
 @app.post("/api/pipeline/run")
 async def trigger_pipeline(request: PipelineRunRequest) -> dict[str, Any]:
     """Manually trigger a pipeline run."""
-    from src.core.pipeline import Pipeline, PipelineContext, load_workflow
+    from src.core.pipeline import PipelineContext, load_workflow
+    from src.core.pipeline_builder import build_pipeline
     from src.core.config import CONFIG_DIR
-    from src.stages.topic_engine.stage import TopicEngineStage
-    from src.stages.text_creator.stage import TextCreatorStage
 
     workflow_path = CONFIG_DIR / "workflows" / f"{request.workflow}.yaml"
     if not workflow_path.exists():
@@ -77,10 +76,7 @@ async def trigger_pipeline(request: PipelineRunRequest) -> dict[str, Any]:
     if request.topic_override:
         context.set("topic_override", request.topic_override)
 
-    # Build pipeline
-    pipeline = Pipeline(name=request.workflow)
-    pipeline.add_stage(TopicEngineStage())
-    pipeline.add_stage(TextCreatorStage())
+    pipeline = build_pipeline(workflow_config)
 
     # Run pipeline
     run = await pipeline.run(context)

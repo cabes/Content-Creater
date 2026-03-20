@@ -29,8 +29,20 @@ async def generate_chart(
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Configure CJK font for matplotlib
+    cjk_font = None
+    for fp in ["/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+               "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc"]:
+        if Path(fp).exists():
+            cjk_font = fm.FontProperties(fname=fp)
+            plt.rcParams["font.family"] = ["Noto Sans CJK SC", "WenQuanYi Zen Hei", "sans-serif"]
+            # Register font
+            fm.fontManager.addfont(fp)
+            break
+
     fig, ax = plt.subplots(figsize=(width / 100, height / 100), dpi=100)
     plt.style.use(style)
+    font_kw = {"fontproperties": cjk_font} if cjk_font else {}
 
     title = data.get("title", "Chart")
 
@@ -40,7 +52,7 @@ async def generate_chart(
             values = data.get("values", [])
             colors = data.get("colors", None)
             ax.bar(labels, values, color=colors)
-            ax.set_title(title, fontsize=20, pad=20)
+            ax.set_title(title, fontsize=20, pad=20, **font_kw)
 
         elif chart_type == "line":
             for series in data.get("series", []):
@@ -50,17 +62,17 @@ async def generate_chart(
                     label=series.get("label", ""),
                     linewidth=2,
                 )
-            ax.legend(fontsize=12)
-            ax.set_title(title, fontsize=20, pad=20)
+            ax.legend(fontsize=12, prop=cjk_font)
+            ax.set_title(title, fontsize=20, pad=20, **font_kw)
 
         elif chart_type == "pie":
             labels = data.get("labels", [])
             values = data.get("values", [])
-            ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
-            ax.set_title(title, fontsize=20, pad=20)
+            ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90,
+                   textprops=font_kw)
+            ax.set_title(title, fontsize=20, pad=20, **font_kw)
 
         elif chart_type == "comparison":
-            # Side-by-side comparison
             categories = data.get("categories", [])
             series_a = data.get("series_a", [])
             series_b = data.get("series_b", [])
@@ -70,9 +82,9 @@ async def generate_chart(
             ax.bar(x - w / 2, series_a, w, label=data.get("label_a", "A"))
             ax.bar(x + w / 2, series_b, w, label=data.get("label_b", "B"))
             ax.set_xticks(x)
-            ax.set_xticklabels(categories)
-            ax.legend()
-            ax.set_title(title, fontsize=20, pad=20)
+            ax.set_xticklabels(categories, **font_kw)
+            ax.legend(prop=cjk_font)
+            ax.set_title(title, fontsize=20, pad=20, **font_kw)
 
         else:
             logger.warning("chart.unknown_type", chart_type=chart_type)

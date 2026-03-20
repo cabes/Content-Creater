@@ -1,7 +1,8 @@
 # Hook Pipeline - 情绪流量层 (高频快速)
+# Full pipeline: 热点扫描 → 情绪分析 → Hook文案 → 合规检查 → TTS → 视频 → 发布
 workflow:
   name: hook_pipeline
-  description: "情绪猎手模式：热点扫描 → 情绪分析 → Hook文案 → 合规检查"
+  description: "情绪猎手模式：全链路自动化"
   schedule: "every 2h"
 
   stages:
@@ -9,7 +10,7 @@ workflow:
         mode: emotion_hunter
         sentiment_scan: true
         max_topics: 5
-        # domain set at runtime or defaults to config
+        # domain set at runtime
 
     - text_creator:
         layer: hook
@@ -18,18 +19,20 @@ workflow:
         quality_check: true
         min_quality_score: 6.0
 
-    # Phase 2+: TTS
-    # - tts_engine:
-    #     speed: normal
-    #     style: engaging
+    - compliance:
+        enabled: true
+        auto_fix: true
+        max_risk_level: 3
 
-    # Phase 3+: Video
-    # - video_maker:
-    #     max_duration: 180
-    #     engines: [moviepy]
+    - tts_engine:
+        speed: normal
+        style: engaging
 
-    # Phase 5+: Publishing
-    # - publisher:
-    #     platforms: [douyin, xiaohongshu, bilibili]
-    #     cta_inject: true
-    #     schedule: optimal_time
+    - video_maker:
+        max_duration: 180
+        engines: [moviepy]
+        max_scenes: 8
+
+    - publisher:
+        platforms: [douyin, xiaohongshu, bilibili]
+        cta_inject: true
