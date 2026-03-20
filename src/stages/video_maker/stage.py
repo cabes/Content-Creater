@@ -11,6 +11,7 @@ from src.core.models import AudioAsset, PipelineStatus, StageResult, Storyboard,
 from src.core.pipeline import PipelineContext, Stage
 from src.stages.video_maker.storyboard import generate_storyboard
 from src.stages.video_maker.asset_gen import generate_ai_image, generate_chart, search_pexels, download_media
+from src.stages.video_maker.asset_gen.ai_image import generate_scene_image
 from src.stages.video_maker.engines import get_video_engine
 from src.stages.video_maker.compositor import composite_final_video, generate_subtitle_file
 
@@ -49,18 +50,10 @@ class VideoMakerStage(Stage):
             )
             context.run.storyboard = storyboard
 
-            # 2. Generate assets
+            # 2. Generate assets for each scene
             assets: dict[str, Path] = {}
             for i, scene in enumerate(storyboard.scenes):
-                for j, asset_desc in enumerate(scene.assets_needed):
-                    asset_key = f"scene_{i}_asset_{j}"
-                    asset_path = await self._generate_asset(
-                        asset_desc, scene, content.domain.value, assets_dir
-                    )
-                    if asset_path:
-                        assets[asset_key] = asset_path
-
-                # Generate charts from scene data
+                # Try chart first if scene has chart data
                 if scene.data.get("chart_type"):
                     chart_path = await generate_chart(
                         chart_type=scene.data["chart_type"],
@@ -69,6 +62,19 @@ class VideoMakerStage(Stage):
                     )
                     if chart_path:
                         assets[f"scene_{i}_chart"] = chart_path
+                        continue  # Chart is the visual for this scene
+
+                # Generate AI scene image based on description
+                scene_desc = scene.description or scene.text_overlay or ""
+                if scene_desc:
+                    img_path = await generate_scene_image(
+                        scene_type=scene.scene_type,
+                        description=scene_desc,
+                        domain=content.domain.value,
+                        output_dir=assets_dir,
+                    )
+                    if img_path:
+                        assets[f"scene_{i}_img"] = img_path
 
             logger.info("video_maker.assets_generated", count=len(assets))
 
@@ -126,27 +132,3 @@ class VideoMakerStage(Stage):
                 error=str(e),
             )
 
-    async def _generate_asset(
-        self,
-        description: str,
-        scene: Any,
-        domain: str,
-        output_dir: Path,
-    ) -> Path | None:
-        """Generate or fetch an asset for a scene."""
-        desc_lower = description.lower()
-
-        # Try AI image generation first
-        if any(kw in desc_lower for kw in ["图", "illustration", "背景", "场景"]):
-            path = await generate_ai_image(description, domain=domain, output_dir=output_dir)
-            if path:
-                return path
-
-        # Try stock media
-        results = await search_pexels(description, per_page=1)
-        if results:
-            path = await download_media(results[0]["url"], output_dir)
-            if path:
-                return path
-
-        return None

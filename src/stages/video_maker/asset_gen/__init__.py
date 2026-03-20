@@ -1,5 +1,5 @@
 """Asset generation package."""
-from .ai_image import generate_ai_image
+from .ai_image import generate_ai_image, generate_scene_image
 from .charts import generate_chart
 from .stock import search_pexels, download_media
 from .diagrams import generate_flowchart, generate_comparison_table
